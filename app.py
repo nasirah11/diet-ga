@@ -10,7 +10,6 @@ def load_data():
 
 food_df = load_data()
 food_df.columns = food_df.columns.str.strip().str.lower()
-st.write(food_df.columns)
 
 
 st.sidebar.header("Genetic Algorithm Parameters")
