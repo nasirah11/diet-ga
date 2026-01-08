@@ -116,5 +116,5 @@ if st.button("Run Optimization"):
 
     st.pyplot(fig)
 
-streamlit run app.py
+
 
