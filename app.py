@@ -6,9 +6,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# =========================
+
 # Load Dataset
-# =========================
+
 @st.cache_data
 def load_data():
     return pd.read_csv("food_data.csv")
@@ -18,9 +18,9 @@ food_df = load_data()
 # Normalize column names (VERY IMPORTANT)
 food_df.columns = food_df.columns.str.strip().str.lower()
 
-# =========================
+
 # Sidebar – GA Parameters
-# =========================
+
 st.sidebar.header("Genetic Algorithm Parameters")
 
 TARGET_CALORIES = st.sidebar.slider("Target Calories", 1500, 3000, 2000)
@@ -29,17 +29,17 @@ GENERATIONS = st.sidebar.slider("Generations", 10, 200, 50)
 MUTATION_RATE = st.sidebar.slider("Mutation Rate", 0.01, 0.5, 0.1)
 BUDGET = st.sidebar.slider("Max Budget (RM)", 10, 50, 20)
 
-# =========================
+
 # GA Configuration
-# =========================
+
 NUM_MEALS = 4  # Breakfast, Lunch, Dinner, Snack
 
 def create_individual():
     return random.sample(list(food_df.index), NUM_MEALS)
 
-# =========================
+
 # Fitness Function (SAFE)
-# =========================
+
 def fitness(individual):
     meals = food_df.loc[individual]
 
@@ -60,34 +60,34 @@ def fitness(individual):
 
     return fitness_score
 
-# =========================
-# Selection – Tournament
-# =========================
+
+# Selection Tournament
+
 def selection(population):
     selected = random.sample(population, 3)
     selected.sort(key=lambda x: fitness(x), reverse=True)
     return selected[0]
 
-# =========================
+
 # Crossover
-# =========================
+
 def crossover(parent1, parent2):
     point = random.randint(1, NUM_MEALS - 1)
     child = parent1[:point] + parent2[point:]
     return list(dict.fromkeys(child))[:NUM_MEALS]
 
-# =========================
+
 # Mutation
-# =========================
+
 def mutation(individual):
     if random.random() < MUTATION_RATE:
         index = random.randint(0, NUM_MEALS - 1)
         individual[index] = random.choice(food_df.index)
     return individual
 
-# =========================
+
 # Genetic Algorithm Loop
-# =========================
+
 def genetic_algorithm():
     population = [create_individual() for _ in range(POP_SIZE)]
     best_fitness_history = []
@@ -108,9 +108,9 @@ def genetic_algorithm():
 
     return best_individual, best_fitness_history
 
-# =========================
+
 # Streamlit UI
-# =========================
+
 st.title("🍽️ Diet Meal Planning Optimisation using Genetic Algorithm")
 
 st.write(
@@ -120,9 +120,9 @@ st.write(
     """
 )
 
-# =========================
+
 # Run Button
-# =========================
+
 if st.button("Run Optimization"):
     best_solution, fitness_history = genetic_algorithm()
     best_meals = food_df.loc[best_solution]
@@ -133,9 +133,9 @@ if st.button("Run Optimization"):
     st.metric("Total Calories", int(best_meals.get("calories", pd.Series(0)).sum()))
     st.metric("Total Cost (RM)", round(best_meals.get("cost", pd.Series(0)).sum(), 2))
 
-    # =========================
+  
     # Fitness Convergence Plot
-    # =========================
+    
     st.subheader("📈 Fitness Convergence")
 
     fig, ax = plt.subplots()
