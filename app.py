@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("Food_and_Nutrition__.csv")
+    return pd.read_csv("food_data.csv")
 
 food_df = load_data()
 
