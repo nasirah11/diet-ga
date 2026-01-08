@@ -9,6 +9,8 @@ def load_data():
     return pd.read_csv("food_data.csv")
 
 food_df = load_data()
+food_df.columns = food_df.columns.str.strip().str.lower()
+
 
 st.sidebar.header("Genetic Algorithm Parameters")
 
